@@ -20,13 +20,27 @@
     PowerShell Ver. : 5.1
 
 .USAGE
+    Put any usage instructions here.
+    Example syntax:
     PS C:\> .\STIG-ID-WN11-CC-000385.ps1
 #>
 
+# Define the registry path and value for WN11-CC-000385
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"
 $valueName = "AllowWindowsInkWorkspace"
-$valueData = 0
+$valueData = 0 # 0x00000000 in hexadecimal
 
-if (-not (Test-Path $registryPath)) { New-Item -Path $registryPath -Force }
+# Check if the registry path exists, if not create it
+if (-not (Test-Path $registryPath)) {
+    New-Item -Path $registryPath -Force
+}
+
+# Set the AllowWindowsInkWorkspace value
 Set-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -Type DWord
+
+# Output success message
 Write-Host "Registry value '$valueName' set to '$valueData' at '$registryPath'."
+
+# Confirmation of success
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace" -Name "AllowWindowsInkWorkspace"
+# Expected Value: AllowWindowsInkWorkspace = 0
